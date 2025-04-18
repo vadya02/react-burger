@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
 import { Modal } from '../Modal/Modal';
+import { IngredientType } from '../../utils/types';
 import styles from './BurgerIngredients.module.css';
 
 export class BurgerIngredients extends Component {
@@ -22,17 +23,7 @@ export class BurgerIngredients extends Component {
   static propTypes = {
     ingredients: PropTypes.arrayOf(
       PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        proteins: PropTypes.number.isRequired,
-        fat: PropTypes.number.isRequired,
-        carbohydrates: PropTypes.number.isRequired,
-        calories: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
-        image: PropTypes.string.isRequired,
-        image_mobile: PropTypes.string.isRequired,
-        image_large: PropTypes.string.isRequired,
+        ...IngredientType.propTypes,
         count: PropTypes.number
       })
     ).isRequired,
