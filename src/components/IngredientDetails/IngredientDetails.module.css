@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
 }
 
 .title {
@@ -15,7 +14,6 @@
   width: 480px;
   height: 240px;
   object-fit: contain;
-  margin: 0 auto;
 }
 
 .name {
@@ -26,8 +24,6 @@
 .nutrients {
   display: flex;
   gap: 20px;
-  justify-content: center;
-  margin-bottom: 60px;
 }
 
 .nutrient {
