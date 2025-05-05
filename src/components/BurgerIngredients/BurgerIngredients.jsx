@@ -1,12 +1,11 @@
-import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
-import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
-import { Modal } from '../Modal/Modal';
-import { IngredientType } from '../../utils/types';
-import styles from './BurgerIngredients.module.css';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IngredientCard } from '../IngredientCard/IngredientCard';
+import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
+import { Modal } from '../Modal/Modal';
+import styles from './BurgerIngredients.module.css';
 
 export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => {} }) => {
   const [current, setCurrent] = useState('bun');

@@ -1,14 +1,12 @@
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import { useState, useMemo } from 'react';
-import { Modal } from '../Modal/Modal';
-import { OrderDetails } from '../OrderDetails/OrderDetails';
-import { IngredientType } from '../../utils/types';
-import styles from './BurgerConstructor.module.css';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient, removeIngredient, moveIngredient } from '../../services/reducers/constructor';
-import { createOrder, clearOrder } from '../../services/reducers/order';
+import { addIngredient, moveIngredient, removeIngredient } from '../../services/reducers/constructor';
+import { clearOrder, createOrder } from '../../services/reducers/order';
+import { Modal } from '../Modal/Modal';
+import { OrderDetails } from '../OrderDetails/OrderDetails';
+import styles from './BurgerConstructor.module.css';
 import { DraggableConstructorItem } from './DraggableConstructorItem';
 
 export const BurgerConstructor = () => {
@@ -16,7 +14,6 @@ export const BurgerConstructor = () => {
   const { bun, ingredients } = useSelector(state => state.burgerConstructor);
   const { number: orderNumber, isLoading: orderLoading, hasError: orderError } = useSelector(state => state.order);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const allIngredients = useSelector(state => state.ingredients.items);
 
 
   const [, dropRef] = useDrop({
