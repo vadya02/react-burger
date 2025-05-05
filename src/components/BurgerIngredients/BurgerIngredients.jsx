@@ -5,6 +5,8 @@ import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
 import { Modal } from '../Modal/Modal';
 import { IngredientType } from '../../utils/types';
 import styles from './BurgerIngredients.module.css';
+import { useSelector } from 'react-redux';
+import { IngredientCard } from '../IngredientCard/IngredientCard';
 
 export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => {} }) => {
   const [current, setCurrent] = useState('bun');
@@ -14,6 +16,8 @@ export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => 
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
   const containerRef = useRef(null);
+
+  const { bun, ingredients: constructorIngredients } = useSelector(state => state.burgerConstructor);
 
   const handleTabClick = (tab) => {
     setCurrent(tab);
@@ -27,25 +31,22 @@ export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => 
   };
 
   const handleScroll = () => {
-    if (containerRef.current) {
-      const container = containerRef.current;
-      const { top: containerTop } = container.getBoundingClientRect();
-      
-      const bunTop = bunRef.current?.getBoundingClientRect().top;
-      const sauceTop = sauceRef.current?.getBoundingClientRect().top;
-      const mainTop = mainRef.current?.getBoundingClientRect().top;
+    if (!containerRef.current || !bunRef.current || !sauceRef.current || !mainRef.current) return;
 
-      const offset = 200;
+    const containerTop = containerRef.current.getBoundingClientRect().top;
 
-      if (bunTop - containerTop <= offset) {
-        setCurrent('bun');
-      }
-      if (sauceTop - containerTop <= offset) {
-        setCurrent('sauce');
-      }
-      if (mainTop - containerTop <= offset) {
-        setCurrent('main');
-      }
+    const bunTop = Math.abs(bunRef.current.getBoundingClientRect().top - containerTop);
+    const sauceTop = Math.abs(sauceRef.current.getBoundingClientRect().top - containerTop);
+    const mainTop = Math.abs(mainRef.current.getBoundingClientRect().top - containerTop);
+
+    const min = Math.min(bunTop, sauceTop, mainTop);
+
+    if (min === bunTop) {
+      setCurrent('bun');
+    } else if (min === sauceTop) {
+      setCurrent('sauce');
+    } else {
+      setCurrent('main');
     }
   };
 
@@ -63,20 +64,20 @@ export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => 
     setSelectedIngredient(null);
   };
 
+  const getCount = (item) => {
+    if (item.type === 'bun') {
+      return bun && bun._id === item._id ? 2 : 0;
+    }
+    return constructorIngredients.filter(i => i._id === item._id).length;
+  };
+
   const renderCard = (item) => (
-    <article 
-      className={styles.card} 
-      key={item._id} 
-      onClick={() => handleIngredientClick(item)}
-    >
-      {item.count > 0 && <Counter count={item.count} size="default" />}
-      <img src={item.image} alt={item.name} className={styles.image} />
-      <div className={styles.price}>
-        <span className="text text_type_digits-default mr-2">{item.price}</span>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={`${styles.name} text text_type_main-default`}>{item.name}</p>
-    </article>
+    <IngredientCard
+      key={item._id}
+      item={item}
+      onClick={handleIngredientClick}
+      count={getCount(item)}
+    />
   );
 
   const buns = ingredients.filter(item => item.type === 'bun');
@@ -139,9 +140,13 @@ export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => 
 BurgerIngredients.propTypes = {
   ingredients: PropTypes.arrayOf(
     PropTypes.shape({
-      ...IngredientType.propTypes,
-      count: PropTypes.number
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+      count: PropTypes.number,
     })
   ).isRequired,
-  onIngredientClick: PropTypes.func
+  onIngredientClick: PropTypes.func,
 };
