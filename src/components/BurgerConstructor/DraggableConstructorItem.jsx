@@ -1,7 +1,8 @@
-import { useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import styles from './BurgerConstructor.module.css';
 
 export const DraggableConstructorItem = ({ item, index, moveCard, handleDelete }) => {
   const ref = useRef(null);
@@ -29,9 +30,9 @@ export const DraggableConstructorItem = ({ item, index, moveCard, handleDelete }
     <div
       ref={ref}
       style={{ opacity: isDragging ? 0.3 : 1, cursor: 'move' }}
-      className="pl-8"
+      className={styles.constructorItem}
     >
-      <DragIcon type="primary" />
+      <DragIcon type="primary"/>
       <ConstructorElement
         text={item.name}
         price={item.price}

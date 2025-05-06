@@ -10,7 +10,7 @@
   align-items: center;
 }
 .image {
-  width: 120px;
+  width: 240px;
   height: 120px;
   object-fit: contain;
 }

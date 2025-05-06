@@ -2,7 +2,7 @@ import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-de
 import { useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient, moveIngredient, removeIngredient } from '../../services/reducers/constructor';
+import { addIngredient, clearConstructor, moveIngredient, removeIngredient } from '../../services/reducers/constructor';
 import { clearOrder, createOrder } from '../../services/reducers/order';
 import { Modal } from '../Modal/Modal';
 import { OrderDetails } from '../OrderDetails/OrderDetails';
@@ -49,6 +49,7 @@ export const BurgerConstructor = () => {
       bun._id
     ];
     dispatch(createOrder(ingredientIds));
+    dispatch(clearConstructor())
     setIsOrderModalOpen(true);
   };
 
@@ -129,5 +130,3 @@ export const BurgerConstructor = () => {
     </>
   );
 };
-
-BurgerConstructor.propTypes = {};

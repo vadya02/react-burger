@@ -1,5 +1,4 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IngredientCard } from '../IngredientCard/IngredientCard';
@@ -7,10 +6,10 @@ import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
 import { Modal } from '../Modal/Modal';
 import styles from './BurgerIngredients.module.css';
 
-export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => {} }) => {
+export const BurgerIngredients = () => {
   const [current, setCurrent] = useState('bun');
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-
+  const ingredients = useSelector(state => state.ingredients.items)
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
@@ -134,18 +133,4 @@ export const BurgerIngredients = ({ ingredients = [], onIngredientClick = () => 
       )}
     </>
   );
-};
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      count: PropTypes.number,
-    })
-  ).isRequired,
-  onIngredientClick: PropTypes.func,
 };

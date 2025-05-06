@@ -12,11 +12,12 @@ const constructorSlice = createSlice({
         if (action.payload.type === 'bun') {
           state.bun = action.payload;
         } else {
-          state.ingredients.push({ ...action.payload, uuid: nanoid() });
+          state.ingredients.push({ ...action.payload, uuid: action.payload.id });
         }
       },
       prepare(ingredient) {
-        return { payload: ingredient };
+        const id = nanoid()
+        return { payload: { ...ingredient, id } };
       },
     },
     removeIngredient(state, action) {

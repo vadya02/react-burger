@@ -1,17 +1,13 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { apiRequest } from '../../utils/apiUtils';
 import { NORMA_API } from '../../utils/constants';
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
   async (_, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`${NORMA_API}/ingredients`);
-      if (!res.ok) throw new Error('Ошибка загрузки ингредиентов');
-      const data = await res.json();
-      return data.data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
+    const res = await apiRequest(`${NORMA_API}/ingredients`);
+    const data = await res;
+    return data.data;
   }
 );
 
