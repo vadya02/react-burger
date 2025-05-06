@@ -1,10 +1,20 @@
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 import styles from './OrderDetails.module.css';
 
-export const OrderDetails = () => {
+export const OrderDetails = ({ orderNumber, isLoading, hasError }) => {
+  if (isLoading) {
+    return <p className="text text_type_main-medium">Загрузка...</p>;
+  }
+  if (hasError) {
+    return <p className="text text_type_main-medium text_color_error">Ошибка при создании заказа</p>;
+  }
+  if (!orderNumber) {
+    return null;
+  }
   return (
     <div className={styles.container}>
-      <p className="text text_type_digits-large mb-8">034536</p>
+      <p className="text text_type_digits-large mb-8">{orderNumber}</p>
       <p className="text text_type_main-medium">идентификатор заказа</p>
       <div className={styles.icon}>
         <CheckMarkIcon type="primary" />
@@ -17,4 +27,10 @@ export const OrderDetails = () => {
       </p>
     </div>
   );
+};
+
+OrderDetails.propTypes = {
+  orderNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
 }; 

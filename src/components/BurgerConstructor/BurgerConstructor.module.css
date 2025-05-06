@@ -47,4 +47,10 @@
 .price {
   display: flex;
   align-items: center;
-} 
+}
+
+.constructorItem {
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
