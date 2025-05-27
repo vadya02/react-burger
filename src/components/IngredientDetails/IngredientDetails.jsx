@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+
 import { IngredientType } from '../../utils/types';
 import styles from './IngredientDetails.module.css';
 
