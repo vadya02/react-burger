@@ -1,59 +1,74 @@
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import styles from './App.module.css';
+import { Provider } from 'react-redux';
+import store from './store/store';
 import AppHeader from './components/AppHeader/AppHeader';
-import IngredientDetails from './components/IngredientDetails/IngredientDetails';
-import Modal from './components/Modal/Modal';
-import ProtectedRouteElement from './components/ProtectedRouteElement';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import IngredientPage from './pages/IngredientPage';
-import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
-import NotFoundPage from './pages/NotFoundPage';
+import AuthCheck from './components/AuthCheck';
+import { Routes, Route, useLocation, useNavigate, BrowserRouter as Router } from 'react-router';
+import { useEffect } from 'react';
+import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
+import ResetPasswordRoute from './components/ResetPasswordRoute';
 import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import IngredientDetails from './components/IngredientDetails/IngredientDetails';
+import {Modal} from './components/Modal/Modal';
+import IngredientPage from './pages/IngredientPage';
+import NotFoundPage from './pages/NotFoundPage';
+import MainPage from './pages/MainPage';
 
 function ModalSwitch() {
   const location = useLocation();
   const navigate = useNavigate();
+  const background = location.state?.background;
 
-  const state = location.state && location.state.background;
+  useEffect(() => {
+    if (background) {
+      navigate(background.pathname, { replace: true });
+    }
+  }, [background, navigate]);
 
   return (
     <>
-      <Routes location={state || location}>
+      <Routes location={background || location}>
         <Route path="/" element={<MainPage />} />
+        
+        {/* Защищенные маршруты */}
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        } />
+        
+        {/* Публичные маршруты */}
         <Route path="/login" element={
-          <ProtectedRouteElement onlyUnAuth>
+          <PublicRoute>
             <LoginPage />
-          </ProtectedRouteElement>
+          </PublicRoute>
         } />
         <Route path="/register" element={
-          <ProtectedRouteElement onlyUnAuth>
+          <PublicRoute>
             <RegisterPage />
-          </ProtectedRouteElement>
+          </PublicRoute>
         } />
         <Route path="/forgot-password" element={
-          <ProtectedRouteElement onlyUnAuth>
+          <PublicRoute>
             <ForgotPasswordPage />
-          </ProtectedRouteElement>
+          </PublicRoute>
         } />
         <Route path="/reset-password" element={
-          <ProtectedRouteElement onlyUnAuth>
+          <ResetPasswordRoute>
             <ResetPasswordPage />
-          </ProtectedRouteElement>
+          </ResetPasswordRoute>
         } />
-        <Route path="/profile/*" element={
-          <ProtectedRouteElement>
-            <ProfilePage />
-          </ProtectedRouteElement>
-        } />
+        
+        {/* Остальные маршруты */}
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Модалка поверх главной страницы */}
-      {state && (
+      {background && (
         <Routes>
           <Route
             path="/ingredients/:id"
@@ -69,15 +84,17 @@ function ModalSwitch() {
   );
 }
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
-      <div className={styles.app}>
+    <Provider store={store}>
+      <Router>
+        <AuthCheck>
         <AppHeader />
-        <main className={styles.main}>
           <ModalSwitch />
-        </main>
-      </div>
-    </BrowserRouter>
+        </AuthCheck>
+      </Router>
+    </Provider>
   );
-} 
+}
+
+export default App; 

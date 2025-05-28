@@ -1,26 +1,17 @@
+import { Navigate, useLocation } from 'react-router';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
 
-export function ProtectedRouteElement({ onlyUnAuth = false, children }) {
-  const isAuth = useSelector(state => state.auth.isAuth);
-  const isUserLoading = useSelector(state => state.auth.isUserLoading);
+export default function ProtectedRouteElement({ element }) {
   const location = useLocation();
+  const isAuthenticated = localStorage.getItem('accessToken');
 
-  if (isUserLoading) return null;
-
-  if (onlyUnAuth && isAuth) {
-    return <Navigate to={location.state?.from || '/'} replace />;
-  }
-
-  if (!onlyUnAuth && !isAuth) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children;
+  return element;
 }
 
 ProtectedRouteElement.propTypes = {
-  onlyUnAuth: PropTypes.bool,
-  children: PropTypes.node.isRequired,
+  element: PropTypes.element.isRequired
 }; 

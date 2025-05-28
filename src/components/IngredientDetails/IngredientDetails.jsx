@@ -1,65 +1,78 @@
+import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { Modal } from '../Modal/Modal';
 import PropTypes from 'prop-types';
 import styles from './IngredientDetails.module.css';
 
-export const IngredientDetails = ({ ingredient }) => {
-  return (
+export default function IngredientDetails() {
+  const { id } = useParams();
+  const ingredients = useSelector(state => state.ingredients.items);
+  const ingredient = ingredients.find(item => item._id === id);
+
+  if (!ingredient) {
+    return null;
+  }
+
+  const content = (
     <div className={styles.container}>
-      <img 
-        src={ingredient.image_large} 
-        alt={ingredient.name} 
+      <img
+        src={ingredient.image_large}
+        alt={ingredient.name}
         className={styles.image}
       />
-      <p className="text text_type_main-medium mt-4 mb-8">
-        {ingredient.name}
-      </p>
-      <div className={styles.nutrients}>
-        <div className={styles.nutrient}>
-          <p className="text text_type_main-default text_color_inactive">
+      <h3 className="text text_type_main-medium mt-4 mb-8">{ingredient.name}</h3>
+      <div className={styles.details}>
+        <div className={styles.detail}>
+          <span className="text text_type_main-default text_color_inactive">
             Калории,ккал
-          </p>
-          <p className="text text_type_digits-default text_color_inactive">
+          </span>
+          <span className="text text_type_digits-default mt-2">
             {ingredient.calories}
-          </p>
+          </span>
         </div>
-        <div className={styles.nutrient}>
-          <p className="text text_type_main-default text_color_inactive">
+        <div className={styles.detail}>
+          <span className="text text_type_main-default text_color_inactive">
             Белки, г
-          </p>
-          <p className="text text_type_digits-default text_color_inactive">
+          </span>
+          <span className="text text_type_digits-default mt-2">
             {ingredient.proteins}
-          </p>
+          </span>
         </div>
-        <div className={styles.nutrient}>
-          <p className="text text_type_main-default text_color_inactive">
+        <div className={styles.detail}>
+          <span className="text text_type_main-default text_color_inactive">
             Жиры, г
-          </p>
-          <p className="text text_type_digits-default text_color_inactive">
+          </span>
+          <span className="text text_type_digits-default mt-2">
             {ingredient.fat}
-          </p>
+          </span>
         </div>
-        <div className={styles.nutrient}>
-          <p className="text text_type_main-default text_color_inactive">
+        <div className={styles.detail}>
+          <span className="text text_type_main-default text_color_inactive">
             Углеводы, г
-          </p>
-          <p className="text text_type_digits-default text_color_inactive">
+          </span>
+          <span className="text text_type_digits-default mt-2">
             {ingredient.carbohydrates}
-          </p>
+          </span>
         </div>
       </div>
     </div>
   );
-};
+
+  if (window.location.pathname === '/') {
+    return <Modal>{content}</Modal>;
+  }
+
+  return content;
+}
 
 IngredientDetails.propTypes = {
   ingredient: PropTypes.shape({
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    image_large: PropTypes.string,
-    calories: PropTypes.number,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-  }).isRequired,
-};
-
-export default IngredientDetails; 
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    image_large: PropTypes.string.isRequired,
+    calories: PropTypes.number.isRequired,
+    proteins: PropTypes.number.isRequired,
+    fat: PropTypes.number.isRequired,
+    carbohydrates: PropTypes.number.isRequired,
+  }),
+}; 
