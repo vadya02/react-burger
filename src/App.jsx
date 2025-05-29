@@ -4,7 +4,6 @@ import AppHeader from './components/AppHeader/AppHeader';
 import AuthCheck from './components/AuthCheck';
 import { Routes, Route, useLocation, BrowserRouter as Router, useNavigate } from 'react-router';
 import ProtectedRoute from './components/ProtectedRoute';
-import PublicRoute from './components/PublicRoute';
 import ResetPasswordRoute from './components/ResetPasswordRoute';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
@@ -29,9 +28,9 @@ function App() {
         <Routes location={background || location}>
           <Route path="/" element={<MainPage />} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-          <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-          <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+          <Route path="/login" element={<ProtectedRoute anonymous={true}><LoginPage /></ProtectedRoute>} />
+          <Route path="/register" element={<ProtectedRoute anonymous={true}><RegisterPage /></ProtectedRoute>} />
+          <Route path="/forgot-password" element={<ProtectedRoute anonymous={true}><ForgotPasswordPage /></ProtectedRoute>} />
           <Route path="/reset-password" element={<ResetPasswordRoute><ResetPasswordPage /></ResetPasswordRoute>} />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
           <Route path="*" element={<NotFoundPage />} />
