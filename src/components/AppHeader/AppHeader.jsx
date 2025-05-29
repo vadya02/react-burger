@@ -1,33 +1,62 @@
-import { Logo } from '@ya.praktikum/react-developer-burger-ui-components'
-import { BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import styles from './AppHeader.module.css'
+import { NavLink, useLocation } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../../store/slices/authSlice';
+import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './AppHeader.module.css';
 
-const AppHeader = () => {
+export default function AppHeader() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { isAuthenticated } = useSelector(state => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  const isProfileActive = location.pathname.startsWith('/profile');
+  const isConstructorActive = location.pathname === '/';
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <div className={styles.leftGroup}>
-          <a href="#" className={styles.link}>
-            <BurgerIcon type="primary" />
-            <span className="text text_type_main-default ml-2">Конструктор</span>
-          </a>
-          <a href="#" className={styles.link}>
-            <ListIcon type="secondary" />
-            <span className="text text_type_main-default text_color_inactive ml-2">Лента заказов</span>
-          </a>
+        <div className={styles.left}>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `${styles.link} ${isActive || isConstructorActive ? styles.active : ''}`
+            }
+          >
+            <span className="text text_type_main-default">Конструктор</span>
+          </NavLink>
+          <NavLink
+            to="/feed"
+            className={({ isActive }) =>
+              `${styles.link} ${isActive ? styles.active : ''}`
+            }
+          >
+            <span className="text text_type_main-default">Лента заказов</span>
+          </NavLink>
         </div>
-        
+
         <div className={styles.logo}>
-          <Logo />
+          <NavLink to="/">
+            <Logo />
+          </NavLink>
         </div>
-        
-        <a href="#" className={styles.link}>
-          <ProfileIcon type="secondary" />
-          <span className="text text_type_main-default text_color_inactive ml-2">Личный кабинет</span>
-        </a>
+
+        <div className={styles.right}>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `${styles.link} ${isActive || isProfileActive ? styles.active : ''}`
+            }
+          >
+            <span className="text text_type_main-default">
+              {isAuthenticated ? 'Личный кабинет' : 'Войти'}
+            </span>
+          </NavLink>
+        </div>
       </nav>
     </header>
-  )
+  );
 }
-
-export default AppHeader
