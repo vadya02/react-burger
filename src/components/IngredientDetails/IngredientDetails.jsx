@@ -1,19 +1,32 @@
-import { useParams } from 'react-router';
-import { useSelector } from 'react-redux';
-import { Modal } from '../Modal/Modal';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchIngredients } from '../../services/reducers/ingredients';
 import PropTypes from 'prop-types';
 import styles from './IngredientDetails.module.css';
 
 export default function IngredientDetails() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const ingredients = useSelector(state => state.ingredients.items);
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
+
   const ingredient = ingredients.find(item => item._id === id);
 
-  if (!ingredient) {
-    return null;
+  if (!ingredients.length) {
+    return <div className="text text_type_main-default p-10">Загрузка...</div>;
   }
 
-  const content = (
+  if (!ingredient) {
+    return <div className="text text_type_main-default p-10">Ингредиент не найден</div>;
+  }
+
+  return (
     <div className={styles.container}>
       <img
         src={ingredient.image_large}
@@ -57,12 +70,6 @@ export default function IngredientDetails() {
       </div>
     </div>
   );
-
-  if (window.location.pathname === '/') {
-    return <Modal>{content}</Modal>;
-  }
-
-  return content;
 }
 
 IngredientDetails.propTypes = {

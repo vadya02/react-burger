@@ -73,7 +73,7 @@ export const BurgerIngredients = () => {
     <IngredientCard
       key={item._id}
       item={item}
-      onClick={handleIngredientClick}
+      onClick={() => handleIngredientClick(item._id)}
       count={getCount(item)}
     />
   );

@@ -11,14 +11,14 @@ export default function IngredientPage() {
   const ingredient = ingredients.find(item => item._id === id);
 
   useEffect(() => {
-    if (!ingredient) {
-      navigate('/', { replace: true });
-    }
+    // if (!ingredient) {
+    //   navigate('/', { replace: true });
+    // }
   }, [ingredient, navigate]);
 
-  if (!ingredient) {
-    return null;
-  }
+  // if (!ingredient) {
+  //   return null;
+  // }
 
   return (
     <div className={styles.container}>
