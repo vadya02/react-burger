@@ -1,12 +1,15 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IngredientCard } from '../IngredientCard/IngredientCard';
-import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
+import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import { Modal } from '../Modal/Modal';
 import styles from './BurgerIngredients.module.css';
+import { useNavigate } from 'react-router';
 
 export const BurgerIngredients = () => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState('bun');
   const [selectedIngredient, setSelectedIngredient] = useState(null);
   const ingredients = useSelector(state => state.ingredients.items)
@@ -17,15 +20,12 @@ export const BurgerIngredients = () => {
 
   const { bun, ingredients: constructorIngredients } = useSelector(state => state.burgerConstructor);
 
-  const handleTabClick = (tab) => {
-    setCurrent(tab);
-    const refs = {
-      bun: bunRef,
-      sauce: sauceRef,
-      main: mainRef
-    };
-
-    refs[tab].current?.scrollIntoView({ behavior: 'smooth' });
+  const handleTabClick = (value) => {
+    setCurrent(value);
+    const element = document.getElementById(value);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleScroll = () => {
@@ -54,8 +54,8 @@ export const BurgerIngredients = () => {
     return () => container?.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleIngredientClick = (ingredient) => {
-    setSelectedIngredient(ingredient);
+  const handleIngredientClick = (id) => {
+    navigate(`/ingredients/${id}`, { state: { background: { pathname: '/' } } });
   };
 
   const handleModalClose = () => {
@@ -73,7 +73,7 @@ export const BurgerIngredients = () => {
     <IngredientCard
       key={item._id}
       item={item}
-      onClick={handleIngredientClick}
+      onClick={() => handleIngredientClick(item._id)}
       count={getCount(item)}
     />
   );
@@ -101,21 +101,27 @@ export const BurgerIngredients = () => {
 
         <div className={styles.ingredients} ref={containerRef}>
           <section ref={bunRef}>
-            <h2 className="text text_type_main-medium mb-6">Булки</h2>
+            <h2 className="text text_type_main-medium mb-6" id="bun">
+              Булки
+            </h2>
             <div className={styles.cards}>
               {buns.map(renderCard)}
             </div>
           </section>
 
           <section ref={sauceRef}>
-            <h2 className="text text_type_main-medium mb-6">Соусы</h2>
+            <h2 className="text text_type_main-medium mb-6" id="sauce">
+              Соусы
+            </h2>
             <div className={styles.cards}>
               {sauces.map(renderCard)}
             </div>
           </section>
 
           <section ref={mainRef}>
-            <h2 className="text text_type_main-medium mb-6">Начинки</h2>
+            <h2 className="text text_type_main-medium mb-6" id="main">
+              Начинки
+            </h2>
             <div className={styles.cards}>
               {mains.map(renderCard)}
             </div>
@@ -133,4 +139,23 @@ export const BurgerIngredients = () => {
       )}
     </>
   );
+};
+
+BurgerIngredients.propTypes = {
+  ingredients: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      proteins: PropTypes.number.isRequired,
+      fat: PropTypes.number.isRequired,
+      carbohydrates: PropTypes.number.isRequired,
+      calories: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+      image_mobile: PropTypes.string.isRequired,
+      image_large: PropTypes.string.isRequired,
+    })
+  ),
+  onIngredientClick: PropTypes.func,
 };
