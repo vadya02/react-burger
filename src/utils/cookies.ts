@@ -40,4 +40,12 @@ export const getCookie = (name: string): string | undefined => {
 
 export const deleteCookie = (name: string): void => {
   setCookie(name, '', { expires: -1 });
-}; 
+};
+
+export function getAccessToken() {
+  const match = document.cookie.match(/accessToken=([^;]+)/);
+  if (match) {
+    return decodeURIComponent(match[1]).replace(/^Bearer /, '');
+  }
+  return '';
+} 
