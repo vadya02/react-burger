@@ -1,8 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import OrderCard from '../components/OrderCard';
 import { useOrdersFeed } from '../hooks/useOrdersFeed';
-import { RootState } from '../store/types';
+import { fetchIngredients } from '../services/reducers/ingredients';
+import { AppDispatch, RootState } from '../store/types';
 import styles from './FeedPage.module.css';
 
 function calcOrderPrice(order: any, allIngredients: any[]) {
@@ -24,13 +26,19 @@ export default function FeedPage() {
   const { orders, total, totalToday } = useOrdersFeed();
   const ingredients = useSelector((state: RootState) => state.ingredients.items);
   const location = useLocation();
-
+  const dispatch = useDispatch<AppDispatch>();
   const ready = orders.filter(o => o.status === 'done');
   const pending = orders.filter(o => o.status === 'pending');
 
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
+
   return (
     <div className={styles.container}>
-      <section>
+      <section className={styles.orders}>
         <h1>Лента заказов</h1>
         {orders.map(order => (
           <Link

@@ -1,25 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/types';
+import { wsOrdersConnect, wsOrdersDisconnect } from '../store/wsOrdersMiddleware';
 
 export function useOrdersFeed() {
-  const [orders, setOrders] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
-  const [totalToday, setTotalToday] = useState(0);
-  const ws = useRef<WebSocket | null>(null);
+  const dispatch = useDispatch();
+  const { orders, total, totalToday, status } = useSelector((state: RootState) => state.wsOrders);
 
   useEffect(() => {
-    ws.current = new WebSocket('wss://norma.nomoreparties.space/orders/all');
-    ws.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.success) {
-        setOrders(data.orders);
-        setTotal(data.total);
-        setTotalToday(data.totalToday);
-      }
-    };
+    dispatch(wsOrdersConnect());
     return () => {
-      ws.current?.close();
+      dispatch(wsOrdersDisconnect());
     };
-  }, []);
+  }, [dispatch]);
 
-  return { orders, total, totalToday };
+  return { orders, total, totalToday, status };
 } 

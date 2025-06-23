@@ -14,11 +14,14 @@ body {
 
 section {
   flex: 1;
-  margin-right: 80px;
   max-height: 100%;
-  overflow-y: auto;
-  padding-right: 16px;
   min-width: 480px;
+}
+
+.orders {
+  overflow-y: auto;
+  margin-right: 80px;
+  padding-right: 16px;
 }
 
 .aside {

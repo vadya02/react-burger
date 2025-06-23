@@ -24,6 +24,14 @@ export interface IngredientsState {
   error: string | null;
 }
 
+export interface WsOrdersState {
+  orders: any[];
+  total: number;
+  totalToday: number;
+  status: 'idle' | 'connecting' | 'online' | 'offline' | 'error';
+  error: string | null;
+}
+
 export interface RootState {
   auth: AuthState;
   burgerConstructor: ConstructorState;
@@ -32,6 +40,8 @@ export interface RootState {
     item: Ingredient | null;
   };
   order: OrderState;
+  userOrders: any;
+  wsOrders: WsOrdersState;
 }
 
 export type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>; 
