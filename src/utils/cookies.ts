@@ -43,9 +43,9 @@ export const deleteCookie = (name: string): void => {
 };
 
 export function getAccessToken() {
-  const match = document.cookie.match(/accessToken=([^;]+)/);
-  if (match) {
-    return decodeURIComponent(match[1]).replace(/^Bearer /, '');
+  const token = getCookie('accessToken');
+  if (token) {
+    return token.replace(/^Bearer\s+/, '');
   }
   return '';
 } 

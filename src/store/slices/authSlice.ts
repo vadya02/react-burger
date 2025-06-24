@@ -37,6 +37,7 @@ export const loginUser = createAsyncThunk<AuthResponse, LoginCredentials>(
   async ({ email, password }) => {
     const response = await login(email, password);
     if (response.success) {
+      console.log('[Auth] Сохранение токенов после входа');
       setCookie('accessToken', response.accessToken, { expires: 1200 }); // 20 минут
       setCookie('refreshToken', response.refreshToken, { expires: 604800 }); // 7 дней
       return response;
@@ -69,8 +70,10 @@ export const refreshUserToken = createAsyncThunk<AuthResponse, void, { dispatch:
     if (!refreshTokenValue) {
       throw new Error('Токен обновления не найден');
     }
+    console.log('[Auth] Обновление токена');
     const response = await refreshToken(refreshTokenValue);
     if (response.success) {
+      console.log('[Auth] Токены обновлены успешно');
       setCookie('accessToken', response.accessToken, { expires: 1200 }); // 20 минут
       setCookie('refreshToken', response.refreshToken, { expires: 604800 }); // 7 дней
       return response;

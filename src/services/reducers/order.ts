@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderRequest, OrderResponse } from '../../types/order';
 import { createOrder as createOrderApi } from '../api';
+import { AppDispatch } from '../../store/types';
+import { refreshUserToken } from '../../store/slices/authSlice';
 
 interface OrderState {
   number: number | null;
@@ -14,11 +16,20 @@ const initialState: OrderState = {
   error: null
 };
 
-export const createOrder = createAsyncThunk<OrderResponse, OrderRequest>(
+export const createOrder = createAsyncThunk<OrderResponse, OrderRequest, { dispatch: AppDispatch }>(
   'order/create',
-  async (orderData) => {
-    const response = await createOrderApi(orderData);
-    return response;
+  async (orderData, { dispatch }) => {
+    try {
+      const response = await createOrderApi(orderData);
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === 'TOKEN_EXPIRED') {
+        await dispatch(refreshUserToken()).unwrap();
+        const retryResponse = await createOrderApi(orderData);
+        return retryResponse;
+      }
+      throw error;
+    }
   }
 );
 

@@ -1,9 +1,8 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, FormEvent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logoutUser, updateUserData } from '../store/slices/authSlice';
-import { AppDispatch, RootState } from '../store/types';
 import styles from './ProfilePage.module.css';
 
 interface FormData {
@@ -23,9 +22,9 @@ interface ErrorResponse {
 }
 
 const ProfilePage: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, isLoading } = useSelector((state: RootState) => state.auth);
+  const { user, isLoading } = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',

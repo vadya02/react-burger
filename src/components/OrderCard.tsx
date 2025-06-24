@@ -1,9 +1,11 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './OrderCard.module.css';
+import { Order } from '../types/order';
+import { Ingredient } from '../types/ingredient';
 
 interface OrderCardProps {
-  order: any;
-  ingredients: any[];
+  order: Order;
+  ingredients: Ingredient[];
   price?: number;
 }
 

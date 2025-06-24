@@ -1,15 +1,14 @@
 import { FC, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch } from 'react-redux';
 import BurgerConstructor from '../components/BurgerConstructor/BurgerConstructor';
 import { BurgerIngredients } from '../components/BurgerIngredients/BurgerIngredients';
+import { useAppDispatch } from '../hooks/redux';
 import { fetchIngredients } from '../services/reducers/ingredients';
-import { AppDispatch } from '../store/types';
 import styles from './MainPage.module.css';
 
 const MainPage: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchIngredients());

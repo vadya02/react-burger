@@ -1,12 +1,12 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, FormEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks/redux';
 import { forgotPassword } from '../services/api';
 import styles from './AuthPage.module.css';
 
 const ForgotPasswordPage: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -21,8 +21,12 @@ const ForgotPasswordPage: FC = () => {
         sessionStorage.setItem('resetToken', 'true');
         navigate('/reset-password');
       }
-    } catch (err: any) {
-      setError(err.message || 'Ошибка при отправке кода восстановления');
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'message' in err) {
+        setError((err as { message?: string }).message || 'Ошибка при отправке кода восстановления');
+      } else {
+        setError('Ошибка при отправке кода восстановления');
+      }
     }
   };
 

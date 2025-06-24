@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import OrderCard from '../components/OrderCard';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useUserOrdersFeed } from '../hooks/useUserOrdersFeed';
 import { fetchIngredients } from '../services/reducers/ingredients';
-import { AppDispatch, RootState } from '../store/types';
-import { getCookie } from '../utils/cookies';
+import { getAccessToken } from '../utils/cookies';
 import styles from './ProfilePage.module.css';
+import { Order } from '../types/order';
+import { Ingredient } from '../types/ingredient';
 
-function calcOrderPrice(order: any, allIngredients: any[]) {
+function calcOrderPrice(order: Order, allIngredients: Ingredient[]) {
   return order.ingredients.reduce((sum: number, id: string) => {
     const ingredient = allIngredients.find(item => item._id === id);
     return sum + (ingredient ? ingredient.price : 0);
@@ -18,19 +19,25 @@ function calcOrderPrice(order: any, allIngredients: any[]) {
 export default function ProfileOrdersPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
-  const dispatch = useDispatch<AppDispatch>();
-  const accessTokenRaw = getCookie('accessToken');
-  const accessToken = accessTokenRaw ? accessTokenRaw.replace('Bearer ', '') : '';
-  useUserOrdersFeed(accessToken);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const accessToken = getAccessToken();
+  
+  console.log('[ProfileOrdersPage] isAuthenticated:', isAuthenticated);
+  console.log('[ProfileOrdersPage] accessToken:', accessToken ? 'present' : 'missing');
 
-  const { orders, error: wsError } = useSelector((state: RootState) => state.userOrders);
+  const { orders, total, totalToday, status, error: wsError } = useUserOrdersFeed(accessToken);
 
   useEffect(() => {
     if (!ingredients.length) {
       dispatch(fetchIngredients());
     }
   }, [dispatch, ingredients.length]);
+
+  if (!isAuthenticated) {
+    return <div>Пожалуйста, войдите в систему</div>;
+  }
 
   return (
     <div className={styles.profilePage}>
@@ -62,9 +69,12 @@ export default function ProfileOrdersPage() {
       </nav>
       <div className={styles.content} style={{ minWidth: 480, maxWidth: 900, overflowY: 'auto' }}>
         <h1 className="text text_type_main-large mb-8">История заказов</h1>
-        {wsError && <div style={{ color: 'red' }}>{wsError}</div>}
+        {status === 'connecting' && <div style={{ color: 'orange' }}>Подключение к серверу...</div>}
+        {status === 'error' && <div style={{ color: 'red' }}>{wsError}</div>}
+        {status === 'offline' && <div style={{ color: 'gray' }}>Соединение разорвано</div>}
+        {status === 'online' && orders.length === 0 && <div style={{ color: 'gray' }}>Заказов пока нет</div>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-          {orders.map((order: any) => (
+          {orders.map((order: Order) => (
             <div
               key={order.number}
               style={{ cursor: 'pointer' }}

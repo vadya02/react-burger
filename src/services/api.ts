@@ -6,9 +6,10 @@ const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 const getHeaders = () => {
   const token = getCookie('accessToken');
+  console.log('[API] getHeaders - token:', token ? 'present' : 'missing');
   return {
     'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': token } : {})
+    ...(token ? { 'Authorization': `${token}` } : {})
   };
 };
 
@@ -103,8 +104,15 @@ export const createOrder = async (orderData: OrderRequest): Promise<OrderRespons
     headers: getHeaders(),
     body: JSON.stringify(orderData)
   });
-  if (!response.ok) {
-    throw new Error('Ошибка при создании заказа');
+  
+  if (response.status === 403) {
+    throw new Error('TOKEN_EXPIRED');
   }
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `Ошибка при создании заказа: ${response.status}`);
+  }
+  
   return response.json();
 }; 

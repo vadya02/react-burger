@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import OrderCard from '../components/OrderCard';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useOrdersFeed } from '../hooks/useOrdersFeed';
 import { fetchIngredients } from '../services/reducers/ingredients';
-import { AppDispatch, RootState } from '../store/types';
 import styles from './FeedPage.module.css';
+import { Order } from '../types/order';
+import { Ingredient } from '../types/ingredient';
 
-function calcOrderPrice(order: any, allIngredients: any[]) {
+function calcOrderPrice(order: Order, allIngredients: Ingredient[]) {
   return order.ingredients.reduce((sum: number, id: string) => {
     const ingredient = allIngredients.find(item => item._id === id);
     return sum + (ingredient ? ingredient.price : 0);
   }, 0);
 }
 
-function splitColumns(arr: any[], size: number) {
-  const res = [];
+function splitColumns<T>(arr: T[], size: number): T[][] {
+  const res: T[][] = [];
   for (let i = 0; i < arr.length; i += size) {
     res.push(arr.slice(i, i + size));
   }
@@ -24,9 +25,9 @@ function splitColumns(arr: any[], size: number) {
 
 export default function FeedPage() {
   const { orders, total, totalToday } = useOrdersFeed();
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
   const location = useLocation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const ready = orders.filter(o => o.status === 'done');
   const pending = orders.filter(o => o.status === 'pending');
 

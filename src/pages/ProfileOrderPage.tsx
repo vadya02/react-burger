@@ -1,9 +1,9 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { RootState } from '../store/types';
+import { useAppSelector } from '../hooks/redux';
 import styles from './FeedOrderPage.module.css';
+import { Order } from '../types/order';
 
 const statusTextMap: Record<string, string> = {
   done: 'Выполнен',
@@ -14,8 +14,8 @@ const statusTextMap: Record<string, string> = {
 
 export default function ProfileOrderPage() {
   const { number } = useParams();
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
-  const [order, setOrder] = useState<any>(null);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
+  const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

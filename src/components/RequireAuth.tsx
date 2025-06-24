@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { RootState } from '../store/types';
+import { useAppSelector } from '../hooks/redux';
  
 export default function RequireAuth({ children }: { children: ReactNode }) {
-  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
   if (!isAuth) return <Navigate to="/login" />;
   return <>{children}</>;
 } 

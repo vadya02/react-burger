@@ -1,11 +1,10 @@
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { addIngredient, clearConstructor, moveIngredient, removeIngredient } from '../../services/reducers/constructor';
 import { clearOrder, createOrder } from '../../services/reducers/order';
-import { AppDispatch, RootState } from '../../store/types';
 import { Ingredient } from '../../types/ingredient';
 import { OrderRequest } from '../../types/order';
 import { Modal } from '../Modal/Modal';
@@ -32,12 +31,12 @@ interface DropCollectProps {
 
 const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const { bun, ingredients } = useSelector((state: RootState) => state.burgerConstructor);
+  const dispatch = useAppDispatch();
+  const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
   const constructorIngredients = ingredients as ConstructorIngredient[];
-  const { number: orderNumber, loading: orderLoading, error: orderError } = useSelector((state: RootState) => state.order);
+  const { number: orderNumber, loading: orderLoading, error: orderError } = useAppSelector((state) => state.order);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -69,7 +68,10 @@ const BurgerConstructor: FC = () => {
   }, [bun, constructorIngredients]);
 
   const handleOrderClick = async (): Promise<void> => {
+    console.log('[BurgerConstructor] Попытка создания заказа, isAuthenticated:', isAuthenticated);
+    
     if (!isAuthenticated) {
+      console.log('[BurgerConstructor] Пользователь не аутентифицирован, перенаправление на логин');
       navigate('/login', { state: { from: '/' } });
       return;
     }
@@ -95,11 +97,14 @@ const BurgerConstructor: FC = () => {
           bun._id
         ]
       };
+      console.log('[BurgerConstructor] Отправка заказа:', orderData);
       await dispatch(createOrder(orderData)).unwrap();
+      console.log('[BurgerConstructor] Заказ создан успешно');
       dispatch(clearConstructor(undefined));
       setIsOrderModalOpen(true);
     } catch (err) {
       const error = err as OrderError;
+      console.error('[BurgerConstructor] Ошибка создания заказа:', error);
       setError(error.message || 'Ошибка при создании заказа');
     } finally {
       setIsLoading(false);

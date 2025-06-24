@@ -54,4 +54,5 @@ const userOrdersSlice = createSlice({
 });
 
 export const { userWsConnecting, userWsOpen, userWsClose, userWsError, userWsMessage } = userOrdersSlice.actions;
-export default userOrdersSlice.reducer; 
+export default userOrdersSlice.reducer;
+export type { UserOrdersState }; 

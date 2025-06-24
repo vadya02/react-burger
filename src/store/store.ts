@@ -4,10 +4,8 @@ import ingredientDetailsReducer from '../services/reducers/ingredientDetails';
 import ingredientsReducer from '../services/reducers/ingredients';
 import orderReducer from '../services/reducers/order';
 import authReducer from './slices/authSlice';
-import type { AppDispatch, RootState } from './types';
-import { userOrdersMiddleware } from './userOrdersMiddleware';
+import { socketMiddleware } from './socketMiddleware';
 import userOrdersReducer from './userOrdersSlice';
-import { wsOrdersMiddleware } from './wsOrdersMiddleware';
 import wsOrdersReducer from './wsOrdersSlice';
 
 export const store = configureStore({
@@ -21,8 +19,9 @@ export const store = configureStore({
     userOrders: userOrdersReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(userOrdersMiddleware, wsOrdersMiddleware),
+    getDefaultMiddleware().concat(socketMiddleware),
 });
 
-export type { AppDispatch, RootState };
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export default store; 

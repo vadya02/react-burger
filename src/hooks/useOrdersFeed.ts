@@ -1,16 +1,20 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/types';
-import { wsOrdersConnect, wsOrdersDisconnect } from '../store/wsOrdersMiddleware';
+import { useAppDispatch, useAppSelector } from './redux';
+import { socketConnect, socketDisconnect } from '../store/socketMiddleware';
+import { wsOrdersConfig } from '../store/wsOrdersConfig';
 
 export function useOrdersFeed() {
-  const dispatch = useDispatch();
-  const { orders, total, totalToday, status } = useSelector((state: RootState) => state.wsOrders);
+  const dispatch = useAppDispatch();
+  const { orders, total, totalToday, status } = useAppSelector((state) => state.wsOrders);
 
   useEffect(() => {
-    dispatch(wsOrdersConnect());
+    dispatch(socketConnect({
+      url: 'wss://norma.nomoreparties.space/orders/all',
+      config: wsOrdersConfig
+    }));
+    
     return () => {
-      dispatch(wsOrdersDisconnect());
+      dispatch(socketDisconnect(wsOrdersConfig));
     };
   }, [dispatch]);
 

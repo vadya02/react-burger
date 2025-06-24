@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
-import { RootState } from '../store/types';
+import { useAppSelector } from '../hooks/redux';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -9,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, anonymous = false }: ProtectedRouteProps) {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const location = useLocation();
   const from = location.state?.from || '/';
 

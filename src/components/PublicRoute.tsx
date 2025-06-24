@@ -1,14 +1,13 @@
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router';
-import { RootState } from '../store/types';
+import { useAppSelector } from '../hooks/redux';
 
 interface PublicRouteProps {
   children: ReactNode;
 }
 
 export default function PublicRoute({ children }: PublicRouteProps) {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
   if (isAuthenticated) {
