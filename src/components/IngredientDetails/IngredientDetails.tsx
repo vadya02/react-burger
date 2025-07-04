@@ -1,8 +1,7 @@
 import { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { fetchIngredients } from '../../services/reducers/ingredients';
-import { AppDispatch, RootState } from '../../store/types';
 import { Ingredient } from '../../types/ingredient';
 import styles from './IngredientDetails.module.css';
 
@@ -17,9 +16,9 @@ interface NutritionDetail {
 }
 
 export const IngredientDetails: FC<IngredientDetailsProps> = ({ ingredient }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
 
   useEffect(() => {
     if (!ingredients.length) {

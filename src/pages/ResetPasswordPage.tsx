@@ -1,12 +1,12 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, FormEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks/redux';
 import { resetPassword } from '../services/api';
 import styles from './AuthPage.module.css';
 
 const ResetPasswordPage: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
@@ -21,8 +21,12 @@ const ResetPasswordPage: FC = () => {
         sessionStorage.removeItem('resetToken');
         navigate('/login');
       }
-    } catch (err: any) {
-      setError(err.message || 'Ошибка при сбросе пароля');
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'message' in err) {
+        setError((err as { message?: string }).message || 'Ошибка при сбросе пароля');
+      } else {
+        setError('Ошибка при сбросе пароля');
+      }
     }
   };
 

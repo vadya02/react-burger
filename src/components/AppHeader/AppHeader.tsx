@@ -1,14 +1,13 @@
 import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logoutUser } from '../../store/slices/authSlice';
-import { AppDispatch, RootState } from '../../store/types';
 import styles from './AppHeader.module.css';
 
 export default function AppHeader() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logoutUser());

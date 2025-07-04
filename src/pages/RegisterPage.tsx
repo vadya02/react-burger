@@ -1,19 +1,18 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { registerUser } from '../store/slices/authSlice';
 import { RegisterCredentials } from '../store/slices/types';
-import { AppDispatch, RootState } from '../store/types';
 import styles from './AuthPage.module.css';
 
 export const RegisterPage: FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error } = useAppSelector((state) => state.auth);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

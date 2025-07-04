@@ -1,22 +1,21 @@
 import { ReactNode, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchUser } from '../store/slices/authSlice';
-import { AppDispatch, RootState } from '../store/types';
-import { getCookie } from '../utils/cookies';
+import { getAccessToken } from '../utils/cookies';
 
 interface AuthCheckProps {
   children: ReactNode;
 }
 
 export default function AuthCheck({ children }: AuthCheckProps) {
-  const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated, isLoading } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, isLoading } = useAppSelector((state) => state.auth);
 
-  // Проверяем токен и в cookies, и в localStorage
-  const accessToken = getCookie('accessToken') || localStorage.getItem('accessToken');
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (accessToken && !isAuthenticated) {
+      console.log('[AuthCheck] Проверка аутентификации с токеном');
       dispatch(fetchUser());
     }
   }, [dispatch, accessToken, isAuthenticated]);

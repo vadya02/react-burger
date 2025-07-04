@@ -1,7 +1,6 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/types';
+import { useAppSelector } from '../../hooks/redux';
 import { Ingredient } from '../../types/ingredient';
 import { IngredientCard } from '../IngredientCard/IngredientCard';
 import { IngredientDetails } from '../IngredientDetails/IngredientDetails';
@@ -13,13 +12,13 @@ type TabType = 'bun' | 'sauce' | 'main';
 export const BurgerIngredients: FC = () => {
   const [current, setCurrent] = useState<TabType>('bun');
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
   const bunRef = useRef<HTMLElement>(null);
   const sauceRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { bun, ingredients: constructorIngredients } = useSelector((state: RootState) => state.burgerConstructor);
+  const { bun, ingredients: constructorIngredients } = useAppSelector((state) => state.burgerConstructor);
 
   const handleTabClick = (tab: TabType): void => {
     setCurrent(tab);

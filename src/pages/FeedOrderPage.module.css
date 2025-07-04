@@ -1,0 +1,134 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 48px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.number {
+  color: #8585ad;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.name {
+  color: #fff;
+  font-size: 28px;
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.status {
+  font-size: 18px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.status.done {
+  color: #00cccc;
+}
+.status.pending {
+  color: #fff700;
+}
+.status.canceled {
+  color: #ff3b3b;
+}
+.sectionTitle {
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  margin-top: 8px;
+  text-align: left;
+  width: 100%;
+}
+.ingredientsList {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  max-height: none;
+  overflow: visible;
+  border-radius: 0 0 16px 16px;
+}
+.scrollable {
+  max-height: 260px;
+  overflow-y: auto;
+  border-right: 4px solid #444466;
+  border-radius: 0 0 16px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #222;
+}
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+.scrollable::-webkit-scrollbar-track {
+  background: #222;
+  border-radius: 8px;
+}
+.ingredientRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #33334d;
+}
+.ingredientIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #131316;
+  border: 2px solid #222;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ingredientIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ingredientName {
+  flex: 1;
+  color: #fff;
+  font-size: 18px;
+}
+.ingredientPrice {
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+}
+.currency {
+  font-size: 20px;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 32px;
+}
+.date {
+  color: #8585ad;
+  font-size: 16px;
+}
+.total {
+  color: #fff;
+  font-size: 32px;
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+} 

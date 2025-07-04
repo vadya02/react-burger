@@ -1,10 +1,9 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { loginUser } from '../store/slices/authSlice';
 import { LoginCredentials } from '../store/slices/types';
-import { AppDispatch, RootState } from '../store/types';
 import { defaultInputEventHandlers } from '../types/events';
 import styles from './AuthPage.module.css';
 
@@ -19,9 +18,9 @@ export const LoginPage: FC = () => {
     password: ''
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error } = useAppSelector((state) => state.auth);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;

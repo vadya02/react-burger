@@ -14,4 +14,14 @@ export interface OrderState {
   number: number | null;
   loading: boolean;
   error: string | null;
+}
+
+export interface Order {
+  _id: string;
+  ingredients: string[];
+  status: 'done' | 'pending' | 'created' | 'canceled' | string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
 } 
