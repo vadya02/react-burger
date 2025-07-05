@@ -1,3 +1,5 @@
+Ссылка на развернутое приложение: https://vadya02.github.io , необходимо перейти на страницу конструктора
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

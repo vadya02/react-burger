@@ -2,6 +2,7 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://vadya02.github.io/react-burger",
   "dependencies": {
     "@reduxjs/toolkit": "^2.7.0",
     "@testing-library/dom": "^10.4.0",
@@ -36,7 +37,9 @@
     "cypress:run:simple": "cypress run --spec \"cypress/e2e/constructor-simple.cy.ts\"",
     "cypress:run:order": "cypress run --spec \"cypress/e2e/order-creation-simple.cy.ts\"",
     "cypress:run:full": "cypress run --spec \"cypress/e2e/full-user-journey.cy.ts\"",
-    "cypress:run:custom": "cypress run --spec \"cypress/e2e/custom-commands-test.cy.ts\""
+    "cypress:run:custom": "cypress run --spec \"cypress/e2e/custom-commands-test.cy.ts\"",
+    "predeploy": "npm run build",
+    "deploy":   "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +61,7 @@
   },
   "devDependencies": {
     "cypress": "^14.5.1",
+    "gh-pages": "^6.3.0",
     "jest": "^27.5.1"
   }
 }
