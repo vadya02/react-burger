@@ -68,7 +68,7 @@ export const BurgerIngredients: FC = () => {
     if (item.type === 'bun') {
       return bun && bun._id === item._id ? 2 : 0;
     }
-    return constructorIngredients.filter(i => i._id === item._id).length;
+    return constructorIngredients?.filter(i => i._id === item._id).length || 0;
   };
 
   const renderCard = (item: Ingredient) => (
@@ -80,9 +80,9 @@ export const BurgerIngredients: FC = () => {
     />
   );
 
-  const buns = ingredients.filter(item => item.type === 'bun');
-  const sauces = ingredients.filter(item => item.type === 'sauce');
-  const mains = ingredients.filter(item => item.type === 'main');
+  const buns = ingredients?.filter(item => item.type === 'bun') || [];
+  const sauces = ingredients?.filter(item => item.type === 'sauce') || [];
+  const mains = ingredients?.filter(item => item.type === 'main') || [];
 
   return (
     <>
@@ -90,6 +90,7 @@ export const BurgerIngredients: FC = () => {
         className={styles.section}
         role="region"
         aria-label="Ингредиенты для бургера"
+        data-testid="ingredients-section"
       >
         <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
         

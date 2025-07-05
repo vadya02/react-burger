@@ -30,7 +30,13 @@
     "start": "set PORT=3005 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:simple": "cypress run --spec \"cypress/e2e/constructor-simple.cy.ts\"",
+    "cypress:run:order": "cypress run --spec \"cypress/e2e/order-creation-simple.cy.ts\"",
+    "cypress:run:full": "cypress run --spec \"cypress/e2e/full-user-journey.cy.ts\"",
+    "cypress:run:custom": "cypress run --spec \"cypress/e2e/custom-commands-test.cy.ts\""
   },
   "eslintConfig": {
     "extends": [
@@ -49,5 +55,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^14.5.1",
+    "jest": "^27.5.1"
   }
 }
