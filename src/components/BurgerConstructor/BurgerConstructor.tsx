@@ -125,6 +125,7 @@ const BurgerConstructor: FC = () => {
         className={`${styles.section} pt-25 pl-4 ${isDropActive ? styles.dropActive : ''}`}
         role="region"
         aria-label="Конструктор бургера"
+        data-testid="burger-constructor"
       >
         <div className={styles.elements}>
           {bun && (
@@ -180,6 +181,7 @@ const BurgerConstructor: FC = () => {
             onClick={handleOrderClick}
             disabled={isLoading || !bun || constructorIngredients.length === 0}
             aria-label={isLoading ? 'Оформление заказа...' : 'Оформить заказ'}
+            data-testid="order-button"
           >
             {isLoading ? 'Оформление...' : 'Оформить заказ'}
           </Button>

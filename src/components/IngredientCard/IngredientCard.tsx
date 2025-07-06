@@ -63,6 +63,7 @@ export const IngredientCard: FC<IngredientCardProps> = ({ item, onClick, count }
       onClick={handleClick}
       role="button"
       tabIndex={0}
+      data-testid="ingredient-card"
       onKeyPress={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           handleClick();

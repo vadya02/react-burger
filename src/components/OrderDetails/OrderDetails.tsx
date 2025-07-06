@@ -51,6 +51,7 @@ export const OrderDetails: FC<OrderDetailsProps> = ({
       className={styles.container}
       role="status"
       aria-label="Детали заказа"
+      data-testid="order-details"
     >
       <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>
       <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
